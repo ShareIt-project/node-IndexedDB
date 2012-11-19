@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "dependencies":
   {
-    "LevelDB": "0.0.1",
+    "leveldb": "0.7.1",
   }
 }
