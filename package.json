@@ -1,0 +1,8 @@
+{
+  "name": "IndexedDB",
+  "version": "0.0.1",
+  "dependencies":
+  {
+    "LevelDB": "0.0.1",
+  }
+}
