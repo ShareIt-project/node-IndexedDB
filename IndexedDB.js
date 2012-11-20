@@ -27,7 +27,7 @@ IDBRequest.prototype =
   }
 };
 
-function IDBOpenRequest()
+function IDBOpenDBRequest()
 {
   IDBRequest.call(this);
 
@@ -37,7 +37,7 @@ function IDBOpenRequest()
 //        func.call(this, event)
 //      })
 };
-IDBOpenRequest.prototype = new IDBRequest();
+IDBOpenDBRequest.prototype = new IDBRequest();
 
 
 function IDBCursor()
@@ -155,11 +155,14 @@ function IDBDatabase()
 
 exports.open = function(name, version)
 {
-  var request = new IDBOpenRequest();
+  var request = new IDBOpenDBRequest();
 
-  leveldb.open(name, {create_if_missing: true}, function(err, db)
+  leveldb.open(name, {create_if_missing: true}, function(error, handle)
   {
-    request.result = new IDBDatabase();
+    var db = new IDBDatabase();
+        db._handle = handle;
+
+    request.result = db;
   });
 
   return request;
