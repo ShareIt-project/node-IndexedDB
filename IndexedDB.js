@@ -10,11 +10,14 @@
 // https://github.com/piranna/ShareIt
 
 
-exports.IDBRequest = function()
+var leveldb = require('leveldb');
+
+
+function IDBRequest()
 {
   this.target = {};
 };
-exports.IDBRequest.prototype =
+IDBRequest.prototype =
 {
   set onsuccess(func)
   {
@@ -24,7 +27,7 @@ exports.IDBRequest.prototype =
   }
 };
 
-exports.IDBOpenRequest = function()
+function IDBOpenRequest()
 {
   IDBRequest.call(this);
 
@@ -34,10 +37,10 @@ exports.IDBOpenRequest = function()
 //        func.call(this, event)
 //      })
 };
-exports.IDBOpenRequest.prototype = new IDBRequest();
+IDBOpenRequest.prototype = new IDBRequest();
 
 
-exports.IDBCursor = function()
+function IDBCursor()
 {
   this._objects = [];
   this._index = 0;
@@ -52,7 +55,7 @@ exports.IDBCursor = function()
     this._request._onsuccess(event);
   };
 }
-exports.IDBCursor.prototype =
+IDBCursor.prototype =
 {
   get value()
   {
@@ -60,7 +63,7 @@ exports.IDBCursor.prototype =
   }
 };
 
-exports.IDBObjectStore = function()
+function IDBObjectStore()
 {
   var objects = {}
 
@@ -112,7 +115,7 @@ exports.IDBObjectStore = function()
   };
 }
 
-exports.IDBTransaction = function()
+function IDBTransaction()
 {
   this.objectStore = function(name)
   {
@@ -120,7 +123,7 @@ exports.IDBTransaction = function()
   };
 }
 
-exports.IDBDatabase = function()
+function IDBDatabase()
 {
   this._stores = {};
 
@@ -154,6 +157,7 @@ var _dbs = {};
 
 exports.open = function(name, version)
 {
+  leveldb.open(name, {create_if_missing: true}, onOpen);
   _dbs[name] = _dbs[name] || new IDBDatabase();
 
   var request = new IDBOpenRequest();
