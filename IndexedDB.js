@@ -153,14 +153,14 @@ function IDBDatabase()
 }
 
 
-var _dbs = {};
-
 exports.open = function(name, version)
 {
-  leveldb.open(name, {create_if_missing: true}, onOpen);
-  _dbs[name] = _dbs[name] || new IDBDatabase();
-
   var request = new IDBOpenRequest();
-      request.result = _dbs[name];
+
+  leveldb.open(name, {create_if_missing: true}, function(err, db)
+  {
+    request.result = new IDBDatabase();
+  });
+
   return request;
 };
