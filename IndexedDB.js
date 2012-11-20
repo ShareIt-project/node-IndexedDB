@@ -10,11 +10,11 @@
 // https://github.com/piranna/ShareIt
 
 
-function IDBRequest()
+exports.IDBRequest = function()
 {
   this.target = {};
-}
-IDBRequest.prototype =
+};
+exports.IDBRequest.prototype =
 {
   set onsuccess(func)
   {
@@ -24,7 +24,7 @@ IDBRequest.prototype =
   }
 };
 
-function IDBOpenRequest()
+exports.IDBOpenRequest = function()
 {
   IDBRequest.call(this);
 
@@ -33,11 +33,11 @@ function IDBOpenRequest()
 //        var event = {target: this.target}
 //        func.call(this, event)
 //      })
-}
-IDBOpenRequest.prototype = new IDBRequest();
+};
+exports.IDBOpenRequest.prototype = new IDBRequest();
 
 
-function IDBCursor()
+exports.IDBCursor = function()
 {
   this._objects = [];
   this._index = 0;
@@ -52,7 +52,7 @@ function IDBCursor()
     this._request._onsuccess(event);
   };
 }
-IDBCursor.prototype =
+exports.IDBCursor.prototype =
 {
   get value()
   {
@@ -60,7 +60,7 @@ IDBCursor.prototype =
   }
 };
 
-function IDBObjectStore()
+exports.IDBObjectStore = function()
 {
   var objects = {}
 
@@ -112,7 +112,7 @@ function IDBObjectStore()
   };
 }
 
-function IDBTransaction()
+exports.IDBTransaction = function()
 {
   this.objectStore = function(name)
   {
@@ -120,7 +120,7 @@ function IDBTransaction()
   };
 }
 
-function IDBDatabase()
+exports.IDBDatabase = function()
 {
   this._stores = {};
 
@@ -150,12 +150,13 @@ function IDBDatabase()
 }
 
 
-window.indexedDB._dbs = {};
-window.indexedDB.open = function(name, version)
+var _dbs = {};
+
+exports.open = function(name, version)
 {
-  this._dbs[name] = this._dbs[name] || new IDBDatabase();
+  _dbs[name] = _dbs[name] || new IDBDatabase();
 
   var request = new IDBOpenRequest();
-      request.result = this._dbs[name];
+      request.result = _dbs[name];
   return request;
 };
